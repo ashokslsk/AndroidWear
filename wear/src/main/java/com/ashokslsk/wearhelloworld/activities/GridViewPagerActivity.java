@@ -20,7 +20,7 @@ public class GridViewPagerActivity extends Activity {
         mGridViewPager = (GridViewPager) findViewById(R.id.pager);
         mPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
         mPageIndicator.setPager(mGridViewPager);
-        GridViewPagerAdapter adapter = new GridViewPagerAdapter(getFragmentManager());
+        GridViewPagerAdapter adapter = new GridViewPagerAdapter(this, getFragmentManager());
         mGridViewPager.setAdapter(adapter);
 
     }

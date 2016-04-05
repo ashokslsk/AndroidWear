@@ -7,8 +7,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_box="left|bottom|right">
+        android:layout_height="match_parent">
 
         <android.support.wearable.view.GridViewPager
             android:id="@+id/pager"
