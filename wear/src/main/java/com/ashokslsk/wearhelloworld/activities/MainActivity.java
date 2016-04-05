@@ -1,7 +1,10 @@
 package com.ashokslsk.wearhelloworld.activities;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.BoxInsetLayout;
 import android.support.wearable.view.WearableListView;
@@ -52,7 +55,34 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }else if(getString(R.string.grid_view_pager_activity).equalsIgnoreCase(title)){
             Intent intent = new Intent(this, GridViewPagerActivity.class);
             startActivity(intent);
+        }else if(getString(R.string.notification_basic).equalsIgnoreCase(title)){
+            showBasicNotification();
+            finish();
+        }else if(getString(R.string.notification_multipage).equalsIgnoreCase(title)){
+            showMultiPageNotification();
+            finish();
         }
+    }
+
+    private void showMultiPageNotification() {
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        Notification notificationpage = getBaseNotificationBuilder().build();
+        NotificationManagerCompat.from(this).notify(1, builder.extend(new NotificationCompat.WearableExtender()
+        .addPage(notificationpage)
+        .addPage(notificationpage)
+        .addPage(notificationpage)).build());
+    }
+
+    private void showBasicNotification() {
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        NotificationManagerCompat.from(this).notify(1,builder.build());
+    }
+
+    private NotificationCompat.Builder getBaseNotificationBuilder() {
+        return new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Notification Title")
+                .setContentText("Notification text");
     }
 
     @Override
