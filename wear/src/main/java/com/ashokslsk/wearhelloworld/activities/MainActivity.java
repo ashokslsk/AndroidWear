@@ -1,8 +1,9 @@
 package com.ashokslsk.wearhelloworld.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.wearable.activity.WearableActivity;
+import android.support.wearable.view.BoxInsetLayout;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +17,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends Activity implements WearableListView.ClickListener {
+public class MainActivity extends WearableActivity implements WearableListView.ClickListener {
 
+    public static boolean isAmbientMode = false;
+    private BoxInsetLayout mBoxInsetLayout;
     private WearableListView mListView;
     private static final String TAG = "MainActivity";
 
@@ -25,7 +28,11 @@ public class MainActivity extends Activity implements WearableListView.ClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setAmbientEnabled();
+
         mListView = (WearableListView) findViewById(R.id.list);
+        mBoxInsetLayout = (BoxInsetLayout) findViewById(R.id.parent);
         String[] items = getResources().getStringArray(R.array.list_items);
         WearableListAdapter adapter = new WearableListAdapter();
         adapter.setItems(new ArrayList(Arrays.asList(items)));
@@ -53,6 +60,26 @@ public class MainActivity extends Activity implements WearableListView.ClickList
         // No operation
     }
 
+    @Override
+    public void onEnterAmbient(Bundle ambientDetails) {
+        super.onEnterAmbient(ambientDetails);
+        isAmbientMode = true;
+        mListView.setBackgroundColor(getResources().getColor(android.R.color.black));
+        mBoxInsetLayout.setBackgroundColor(getResources().getColor(android.R.color.black));
+        mListView.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void onExitAmbient() {
+        super.onExitAmbient();
+        isAmbientMode = false;
+        mListView.setBackgroundColor(getResources().getColor(android.R.color.white));
+        mBoxInsetLayout.setBackgroundColor(getResources().getColor(android.R.color.white));
+        mListView.getAdapter().notifyDataSetChanged();
+    }
+
+
+
     private static final class WearableListAdapter extends WearableListView.Adapter {
 
         private List<String> items = new ArrayList<String>();
@@ -66,7 +93,24 @@ public class MainActivity extends Activity implements WearableListView.ClickList
         public void onBindViewHolder(WearableListView.ViewHolder holder, int position) {
             ViewHolder viewHolder = (ViewHolder) holder;
             ((ViewHolder) holder).textView.setText(items.get(position));
+
+            if(MainActivity.isAmbientMode){
+                viewHolder.textView.setTextColor(viewHolder.textView.getResources().getColor(android.R.color.white));
+            }else{
+                viewHolder.textView.setTextColor(viewHolder.textView.getResources().getColor(android.R.color.black));
+            }
+
             viewHolder.itemView.setTag(position);
+        }
+
+        @Override
+        public void onViewRecycled(WearableListView.ViewHolder holder) {
+            super.onViewRecycled(holder);
+
+            ViewHolder viewholder = (ViewHolder) holder;
+            if(MainActivity.isAmbientMode){
+                viewholder.textView.setTextColor(viewholder.textView.getResources().getColor(android.R.color.white));
+            }
         }
 
         @Override
