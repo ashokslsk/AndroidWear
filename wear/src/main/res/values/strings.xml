@@ -2,4 +2,6 @@
     <string name="app_name">WearHelloWorld</string>
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
+    <string name="delayed_confirmation_view_activity">Delayed confirmation view</string>
+
 </resources>

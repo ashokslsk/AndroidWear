@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="list_items">
-        <item>Dunst Item 1 </item>
+        <item>@string/delayed_confirmation_view_activity</item>
         <item>Dunst Item 2 </item>
         <item>Dunst Item 3 </item>
         <item>Dunst Item 4 </item>
         <item>Dunst Item 5 </item>
         <item>Dunst Item 6 </item>
     </string-array>
-
 </resources>
