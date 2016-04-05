@@ -23,8 +23,6 @@ public class DelayedConfirmationViewActivity extends Activity implements Delayed
         mDelayedConfirmationView.setTotalTimeMs(3000);
         mDelayedConfirmationView.setListener(this);
         mDelayedConfirmationView.start();
-
-
     }
 
     @Override

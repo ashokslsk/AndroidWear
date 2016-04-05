@@ -3,5 +3,6 @@
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
     <string name="delayed_confirmation_view_activity">Delayed confirmation view</string>
+    <string name="grid_view_pager_activity">Grid View Pager Activity</string>
 
 </resources>

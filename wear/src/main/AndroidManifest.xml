@@ -19,8 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activities.DelayedConfirmationViewActivity"/>
+        <activity android:name=".activities.DelayedConfirmationViewActivity" />
+        <activity android:name=".activities.GridViewPagerActivity"></activity>
     </application>
 
 </manifest>

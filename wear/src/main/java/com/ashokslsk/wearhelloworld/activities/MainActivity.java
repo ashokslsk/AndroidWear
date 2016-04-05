@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ashokslsk.wearhelloworld.R;
 
@@ -38,10 +37,13 @@ public class MainActivity extends Activity implements WearableListView.ClickList
     public void onClick(WearableListView.ViewHolder viewHolder) {
         String title = ((TextView) viewHolder.itemView.findViewById(R.id.text))
                 .getText().toString();
-        Toast.makeText(this,title, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,title, Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onClick:");
         if(getString(R.string.delayed_confirmation_view_activity).equalsIgnoreCase(title)){
             Intent intent = new Intent(this, DelayedConfirmationViewActivity.class);
+            startActivity(intent);
+        }else if(getString(R.string.grid_view_pager_activity).equalsIgnoreCase(title)){
+            Intent intent = new Intent(this, GridViewPagerActivity.class);
             startActivity(intent);
         }
     }
