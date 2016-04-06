@@ -3,7 +3,8 @@
     package="com.ashokslsk.wearhelloworld">
 
     <uses-feature android:name="android.hardware.type.watch" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -11,8 +12,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
-
-        <uses-library android:name="com.google.android.wearable" android:required="false"/>
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="false" />
 
         <activity
             android:name=".activities.MainActivity"
@@ -24,8 +26,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.DelayedConfirmationViewActivity" />
-        <activity android:name=".activities.GridViewPagerActivity"></activity>
-        <activity android:name="android.support.wearable.activity.ConfirmationActivity"/>
+        <activity android:name=".activities.GridViewPagerActivity" />
+        <activity android:name="android.support.wearable.activity.ConfirmationActivity" />
+        <activity
+            android:name=".activities.CustomNotificationActivity"
+            android:exported="true"
+            android:allowEmbedded="true"
+            android:taskAffinity=""/>
     </application>
 
 </manifest>

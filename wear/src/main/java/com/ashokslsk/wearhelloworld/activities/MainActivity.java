@@ -35,9 +35,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setAmbientEnabled();
-
         mListView = (WearableListView) findViewById(R.id.list);
         mBoxInsetLayout = (BoxInsetLayout) findViewById(R.id.parent);
         String[] items = getResources().getStringArray(R.array.list_items);
@@ -45,7 +43,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         adapter.setItems(new ArrayList(Arrays.asList(items)));
         mListView.setAdapter(adapter);
         mListView.setClickListener(this);
-
         if(getIntent() != null){
             Bundle remoteInput = android.support.v4.app.RemoteInput.getResultsFromIntent(getIntent());
 
@@ -82,9 +79,32 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }else if(getString(R.string.notification_reply).equalsIgnoreCase(title)){
             showReplyNotification();
             finish();
+        }else if(getString(R.string.notification_custom_screen).equalsIgnoreCase(title)){
+            showCustomNotification();
+            finish();
         }
     }
 
+    private void showCustomNotification() {
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        builder.extend(new NotificationCompat.WearableExtender()
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_XSMALL))
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_SMALL))
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_MEDIUM))
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_LARGE))
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_FULL_SCREEN)));
+
+        NotificationManagerCompat.from(this).notify(1,builder.build());
+    }
+
+    private Notification getCustomSizeNotificationPage(int size){
+        Intent intent = new Intent(this, CustomNotificationActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        builder.extend(new NotificationCompat.WearableExtender().setDisplayIntent(pendingIntent).setCustomSizePreset(size));
+        return builder.build();
+    }
 
     private void showReplyNotification(){
         NotificationCompat.Builder builder = getBaseNotificationBuilder();
