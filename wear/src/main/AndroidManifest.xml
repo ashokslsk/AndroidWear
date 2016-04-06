@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".activities.DelayedConfirmationViewActivity" />
         <activity android:name=".activities.GridViewPagerActivity"></activity>
+        <activity android:name="android.support.wearable.activity.ConfirmationActivity"/>
     </application>
 
 </manifest>

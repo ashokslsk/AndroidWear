@@ -1,10 +1,12 @@
 package com.ashokslsk.wearhelloworld.activities;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.wearable.activity.ConfirmationActivity;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.BoxInsetLayout;
 import android.support.wearable.view.WearableListView;
@@ -13,9 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.ashokslsk.wearhelloworld.R;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -61,7 +61,60 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }else if(getString(R.string.notification_multipage).equalsIgnoreCase(title)){
             showMultiPageNotification();
             finish();
+        }else if(getString(R.string.notification_stacked).equalsIgnoreCase(title)){
+            showStackedNotification();
+            finish();
+        }else if(getString(R.string.notification_action).equalsIgnoreCase(title)){
+            showActionNotification();
+            finish();
         }
+    }
+
+    private void showActionNotification() {
+
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        Intent intent = new Intent(this, ConfirmationActivity.class);
+        intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,ConfirmationActivity.SUCCESS_ANIMATION);
+        intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE, "Successs!!!");
+        PendingIntent pendingintent = PendingIntent.getActivity(this, 0, intent ,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.addAction(new NotificationCompat.Action(R.mipmap.ic_launcher,"Action Title", pendingintent));
+        NotificationManagerCompat.from(this).notify(1,builder.build());
+        startActivity(intent);
+
+    }
+
+    private void showStackedNotification() {
+
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        builder.setGroup("key");
+
+
+        Notification notification = builder.build();
+        NotificationManagerCompat.from(this).notify(1,notification);
+
+        builder = getBaseNotificationBuilder();
+        builder.setGroup("key");
+        notification = builder.build();
+        NotificationManagerCompat.from(this).notify(2,notification);
+
+        builder = getBaseNotificationBuilder();
+        builder.setGroup("key");
+        notification = builder.build();
+        NotificationManagerCompat.from(this).notify(3,notification);
+
+        builder = getBaseNotificationBuilder()
+                .setGroup("key")
+                .setGroupSummary(true)
+                .setStyle(new NotificationCompat.InboxStyle()
+                .setBigContentTitle("title")
+                .setSummaryText("Text for stack notification")
+                .addLine("Message 1")
+                .addLine("Message 2")
+                .addLine("Message 3"));
+
+        NotificationManagerCompat.from(this).notify(4,builder.build());
+
+
     }
 
     private void showMultiPageNotification() {
@@ -107,7 +160,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         mBoxInsetLayout.setBackgroundColor(getResources().getColor(android.R.color.white));
         mListView.getAdapter().notifyDataSetChanged();
     }
-
 
 
     private static final class WearableListAdapter extends WearableListView.Adapter {
