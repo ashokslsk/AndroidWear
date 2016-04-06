@@ -11,4 +11,15 @@
         <item>@string/notification_reply</item>
         <item>@string/notification_custom_screen</item>
     </string-array>
+    
+    <string-array name="reply_items">
+        <item>Item 1</item>
+        <item>Item 2</item>
+        <item>Item 3</item>
+        <item>Item 4</item>
+        <item>Item 5</item>
+        <item>Item 6</item>
+        <item>Item 7</item>
+    </string-array>
+
 </resources>

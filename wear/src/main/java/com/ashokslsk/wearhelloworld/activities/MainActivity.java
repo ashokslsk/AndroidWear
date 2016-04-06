@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.RemoteInput;
 import android.support.wearable.activity.ConfirmationActivity;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.BoxInsetLayout;
@@ -15,7 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.ashokslsk.wearhelloworld.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +45,14 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         adapter.setItems(new ArrayList(Arrays.asList(items)));
         mListView.setAdapter(adapter);
         mListView.setClickListener(this);
+
+        if(getIntent() != null){
+            Bundle remoteInput = android.support.v4.app.RemoteInput.getResultsFromIntent(getIntent());
+
+            if(remoteInput != null){
+                Toast.makeText(this, remoteInput.getCharSequence("reply").toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -67,7 +79,30 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }else if(getString(R.string.notification_action).equalsIgnoreCase(title)){
             showActionNotification();
             finish();
+        }else if(getString(R.string.notification_reply).equalsIgnoreCase(title)){
+            showReplyNotification();
+            finish();
         }
+    }
+
+
+    private void showReplyNotification(){
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+
+        String[] replies = getResources().getStringArray(R.array.reply_items);
+
+
+        RemoteInput remoteInput = new RemoteInput.Builder("reply")
+                .setLabel("Label")
+                .setChoices(replies)
+                .build();
+
+        Intent replyIntent = new Intent(this,MainActivity.class);
+        PendingIntent replyPendingIntent = PendingIntent.getActivity(this, 0, replyIntent ,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.extend(new NotificationCompat.WearableExtender().addAction(new NotificationCompat.Action.Builder(
+                R.mipmap.ic_launcher,"Reply Ashu",replyPendingIntent
+        ).addRemoteInput(remoteInput).build()));
+        NotificationManagerCompat.from(this).notify(1,builder.build());
     }
 
     private void showActionNotification() {
@@ -84,7 +119,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     }
 
     private void showStackedNotification() {
-
         NotificationCompat.Builder builder = getBaseNotificationBuilder();
         builder.setGroup("key");
 
