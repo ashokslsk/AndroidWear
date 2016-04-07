@@ -3,8 +3,9 @@
     package="com.ashokslsk.wearhelloworld">
 
     <uses-feature android:name="android.hardware.type.watch" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission
+        android:name="com.google.android.permission.PROVIDE_BACKGROUND" />
 
     <application
         android:allowBackup="true"
@@ -33,6 +34,28 @@
             android:exported="true"
             android:allowEmbedded="true"
             android:taskAffinity=""/>
+        <service android:name=".services.DigitalWatchFaceService"
+            android:label="Ashok watchFace"
+            android:permission="android.permission.BIND_WALLPAPER">
+
+        <meta-data
+            android:name="android.service.wallpaper"
+            android:resource="@xml/watch_face" />
+        <meta-data
+            android:name="com.google.android.wearable.watchface.preview"
+            android:resource="@mipmap/ic_launcher" />
+        <meta-data
+            android:name="com.google.android.wearable.watchface.preview_circular"
+            android:resource="@mipmap/ic_launcher" />
+
+        <intent-filter>
+            <action android:name="android.service.wallpaper.WallpaperService" />
+            <category
+                android:name=
+                    "com.google.android.wearable.watchface.category.WATCH_FACE" />
+        </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

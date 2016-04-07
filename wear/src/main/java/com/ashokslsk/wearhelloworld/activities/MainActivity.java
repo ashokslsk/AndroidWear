@@ -17,9 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.ashokslsk.wearhelloworld.R;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -100,7 +98,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private Notification getCustomSizeNotificationPage(int size){
         Intent intent = new Intent(this, CustomNotificationActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
         NotificationCompat.Builder builder = getBaseNotificationBuilder();
         builder.extend(new NotificationCompat.WearableExtender().setDisplayIntent(pendingIntent).setCustomSizePreset(size));
         return builder.build();
