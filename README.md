@@ -13,6 +13,21 @@ It displays a vertically scrollable list of items, and automatically snaps to th
 [Google Developer Documentaion](http://developer.android.com/reference/android/support/wearable/view/WearableListView.html).
 With customlayout and custom adapter this example triggers a toast whenever user taps on the listitem.
 
+##Sample Code
+```
+  <android.support.wearable.view.WearableListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+  
+  mListView = (WearableListView) findViewById(R.id.list);
+  
+  WearableListAdapter adapter = new WearableListAdapter();
+  adapter.setItems(new ArrayList(Arrays.asList(items)));
+  mListView.setAdapter(adapter);
+  
+```
+
 ![Screen_after_response](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_1.png)
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_2.png)
 
@@ -21,6 +36,36 @@ DelayedConfirmationView provides a circular countdown timer, typically used to a
 The delay is intended to give the user a chance to cancel the operation by tapping the View.
 [Google Developer Documentation](http://developer.android.com/reference/android/support/wearable/view/DelayedConfirmationView.html)
 
+
+##Sample Code
+```
+public class DelayedConfirmationViewActivity extends Activity implements DelayedConfirmationView.DelayedConfirmationListener {
+    private DelayedConfirmationView mDelayedConfirmationView;
+
+      protected void onCreate(Bundle savedInstanceState) {
+
+        mDelayedConfirmationView = (DelayedConfirmationView) findViewById(R.id.delayed_confirmation);
+        mDelayedConfirmationView.setTotalTimeMs(3000);
+        mDelayedConfirmationView.setListener(this);
+        mDelayedConfirmationView.start();
+
+      }
+      
+      
+      @Override
+    public void onTimerFinished(View view) {
+    
+    }
+    
+    @Override
+    public void onTimerSelected(View view) {
+    
+    }
+
+}
+
+```
+
 ![Screen_after_response](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_3.png)
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_4.png)
 
@@ -28,6 +73,33 @@ The delay is intended to give the user a chance to cancel the operation by tappi
 Layout manager that allows the user to navigate both vertically and horizontally through pages of content. 
 You supply an implementation of a GridPagerAdapter to generate pages for the view to show
 [Google Developer Documentaion](http://developer.android.com/reference/android/support/wearable/view/GridViewPager.html)
+
+##Sample Code
+```
+   <android.support.wearable.view.GridViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:keepScreenOn="true"/>
+
+        <android.support.wearable.view.DotsPageIndicator
+            android:id="@+id/page_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"/>
+
+//Java Code
+        private GridViewPager mGridViewPager;
+        private DotsPageIndicator mPageIndicator;     
+
+        mGridViewPager = (GridViewPager) findViewById(R.id.pager);
+        mPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
+        mPageIndicator.setPager(mGridViewPager);
+        GridViewPagerAdapter adapter = new GridViewPagerAdapter(this, getFragmentManager());
+        mGridViewPager.setAdapter(adapter);
+
+```
+
 ![Screen_after_response](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_5.png)
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_6.png)
 ![Screen_after_response](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_7.png)
@@ -43,12 +115,44 @@ Making an app constantly visible has an impact on battery life,
 so you should carefully consider that impact when adding this feature to your app.
 [Google Developer Documentation](http://developer.android.com/reference/android/support/wearable/activity/WearableActivity.html).
 
+```
+
+public class MainActivity extends WearableActivity implements WearableListView.ClickListener {
+
+      @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        setAmbientEnabled();
+      }
+}
+
+//In Manifest add the following permissions
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND"/>
+
+```
+
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_9.png)
 
 #Basic and MultiPage Notifications
 When you'd like to provide more information without requiring users to open your app on their handheld device,
 you can add one or more pages to the notification on the wearable. 
 The additional pages appear immediately to the right of the main notification card.
+
+```
+
+ private NotificationCompat.Builder getBaseNotificationBuilder() {
+        return new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Notification Title")
+                .setContentText("Notification text");
+    }
+    
+private void showBasicNotification() {
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        NotificationManagerCompat.from(this).notify(1,builder.build());
+    }  
+
+```
 
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_10.png)
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_11.png)
@@ -59,6 +163,18 @@ For example, if your app creates notifications for received messages, you should
 more than one is message is received, use a single notification to provide a summary such as "2 new messages."
 [Google Developer Documentation](http://developer.android.com/training/wearables/notifications/stacks.html)
 
+```
+private void showMultiPageNotification() {
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        Notification notificationpage = getBaseNotificationBuilder().build();
+        NotificationManagerCompat.from(this).notify(1, builder.extend(new NotificationCompat.WearableExtender()
+        .addPage(notificationpage)
+        .addPage(notificationpage)
+        .addPage(notificationpage)).build());
+    }
+
+```
+
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_12.png)
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_13.png)
 
@@ -67,6 +183,28 @@ If you have handheld notifications that include an action to input text, such as
 it should normally launch an activity on the handheld device to input the text. 
 However, when your notification appears on a wearable, there is no keyboard input, so you can let users dictate a reply or provide pre-defined text messages using RemoteInput.
 [Google Developer Documentation](http://developer.android.com/training/wearables/notifications/voice-input.html)
+
+```
+private void showReplyNotification(){
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+
+        String[] replies = getResources().getStringArray(R.array.reply_items);
+
+
+        RemoteInput remoteInput = new RemoteInput.Builder("reply")
+                .setLabel("Label")
+                .setChoices(replies)
+                .build();
+
+        Intent replyIntent = new Intent(this,MainActivity.class);
+        PendingIntent replyPendingIntent = PendingIntent.getActivity(this, 0, replyIntent ,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.extend(new NotificationCompat.WearableExtender().addAction(new NotificationCompat.Action.Builder(
+                R.mipmap.ic_launcher,"Reply Ashu",replyPendingIntent
+        ).addRemoteInput(remoteInput).build()));
+        NotificationManagerCompat.from(this).notify(1,builder.build());
+    }
+
+```
 
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_15.png)
 
@@ -77,6 +215,28 @@ Do not port functionality and the UI from a handheld app and expect a good exper
 You should create custom layouts only when necessary. 
 Read the design guidelines for information on how to design great wearable apps.
 [Google Developer Documentation](http://developer.android.com/training/wearables/apps/layouts.html)
+
+```
+private void showCustomNotification() {
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        builder.extend(new NotificationCompat.WearableExtender()
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_XSMALL))
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_SMALL))
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_MEDIUM))
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_LARGE))
+                .addPage(getCustomSizeNotificationPage(Notification.WearableExtender.SIZE_FULL_SCREEN)));
+
+        NotificationManagerCompat.from(this).notify(1,builder.build());
+    }
+
+    private Notification getCustomSizeNotificationPage(int size){
+        Intent intent = new Intent(this, CustomNotificationActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = getBaseNotificationBuilder();
+        builder.extend(new NotificationCompat.WearableExtender().setDisplayIntent(pendingIntent).setCustomSizePreset(size));
+        return builder.build();
+    }
+```
 
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_16.png)
 
@@ -90,6 +250,57 @@ a wearable app with watch faces, they become available in the Android Wear compa
 watch face picker on the wearable device.
 This class teaches you to implement custom watch faces and to package them inside a wearable app. This class also covers design considerations and implementation tips to ensure that your designs integrate with system UI elements and are power-efficient.
 [Google Developer Documentation](http://developer.android.com/training/wearables/watch-faces/index.html)
+
+```
+public class DigitalWatchFaceService extends CanvasWatchFaceService {
+
+  @Override
+    public Engine onCreateEngine() {
+        return new Engine();
+    }
+    
+    private class Engine extends CanvasWatchFaceService.Engine{
+        
+         @Override
+        public void onCreate(SurfaceHolder holder) {
+            super.onCreate(holder);
+            /* initialize your watch face */
+        }
+
+        @Override
+        public void onPropertiesChanged(Bundle properties) {
+            super.onPropertiesChanged(properties);
+            /* get device features (burn-in, low-bit ambient) */
+        }
+
+        @Override
+        public void onTimeTick() {
+            super.onTimeTick();
+            /* the time changed */
+        }
+
+        @Override
+        public void onAmbientModeChanged(boolean inAmbientMode) {
+            super.onAmbientModeChanged(inAmbientMode);
+            /* the wearable switched between modes */
+        }
+
+        @Override
+        public void onDraw(Canvas canvas, Rect bounds) {
+            /* draw your watch face */
+        }
+
+        @Override
+        public void onVisibilityChanged(boolean visible) {
+            super.onVisibilityChanged(visible);
+            /* the watch face became visible or invisible */
+        }
+    
+        
+    }
+
+}
+```
 
 ![Screen_after_toast](https://github.com/ashokslsk/AndroidWear/blob/master/screens/Screen_17.png)
 
